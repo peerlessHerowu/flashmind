@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --toast-bg: #1E1E2E;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    /* 安全区域支持（iPhone 刘海屏） */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+      'PingFang SC', 'HarmonyOS Sans', system-ui, sans-serif;
+    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white;
+    overscroll-behavior: none;
+  }
+
+  /* 禁用文字选中（复习卡片体验） */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+@layer utilities {
+  .pt-safe-top {
+    padding-top: max(env(safe-area-inset-top), 1rem);
+  }
+  .pb-safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+  }
+
+  /* 自定义滚动条 */
+  .scrollbar-none {
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+}
