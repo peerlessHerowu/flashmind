@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Plus, Search, MoreVertical, Trash2, Archive, Upload } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDeck, useDeckStats, deleteDeck, updateDeck } from '@/hooks/useDeck'
-import { useCards, deleteCard, toggleSuspend, bulkImportCards } from '@/hooks/useCard'
+import { useCards, deleteCard, bulkImportCards } from '@/hooks/useCard'
 import { useDueCount } from '@/hooks/useReviewQueue'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Button } from '@/components/ui/Button'
@@ -235,8 +235,10 @@ export function DeckDetail() {
             <p>banana,香蕉</p>
           </div>
           <p className="text-xs text-gray-400">第一行为表头，tags 列可选，多标签用 ; 分隔</p>
-          <label className="block">
-            <Button as="span" fullWidth variant="secondary" className="cursor-pointer">选择 CSV 文件</Button>
+          <label className="block cursor-pointer">
+            <span className="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium rounded-xl bg-primary-50 text-primary-600 hover:bg-primary-100 dark:bg-primary-500/10 dark:text-primary-400 dark:hover:bg-primary-500/20 transition-all duration-150">
+              选择 CSV 文件
+            </span>
             <input type="file" accept=".csv,text/csv" className="sr-only" onChange={handleImportCSV} />
           </label>
         </div>

@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import { router } from './router'
 import { useAppStore } from './store/useAppStore'
 import { ensureSettings } from './db'
+import { PWAInstallPrompt } from './components/ui/PWAInstallPrompt'
 
 export default function App() {
   const { theme, setTheme } = useAppStore()
@@ -36,6 +37,7 @@ export default function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <PWAInstallPrompt />
       <Toaster
         position="top-center"
         toastOptions={{
