@@ -3,6 +3,7 @@ import type { Deck, DeckStats } from '@/types'
 import { CardState } from '@/types'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { scheduleSyncDebounced, pushChanges, getClientId } from '@/sync'
+import { uuid } from '@/utils/uuid'
 
 /** 所有未归档牌组（响应式） */
 export function useDecks() {
@@ -20,7 +21,7 @@ export function useDeck(id: string) {
 
 /** 创建牌组 */
 export async function createDeck(data: Omit<Deck, 'id' | 'created_at' | 'updated_at'>): Promise<string> {
-  const id = crypto.randomUUID()
+  const id = uuid()
   const now = Date.now()
   await db.decks.add({ ...data, id, created_at: now, updated_at: now })
   scheduleSyncDebounced()

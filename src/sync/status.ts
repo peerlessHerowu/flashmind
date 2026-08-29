@@ -36,7 +36,9 @@ export const useSyncStore = create<SyncStore>((set, get) => ({
     } else if (result === 'offline') {
       set({ status: 'offline', errorMsg: '服务器不可达，数据已保存本地' })
     } else {
-      set({ status: 'error', errorMsg: '同步出错，请稍后重试' })
+      // 获取详细错误信息用于调试
+      const detail = (window as any).__lastSyncError ?? '未知错误'
+      set({ status: 'error', errorMsg: `同步出错：${detail}` })
     }
   },
 

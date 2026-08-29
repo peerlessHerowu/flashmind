@@ -4,6 +4,7 @@ import type { Card, ImportRow } from '@/types'
 import { Rating } from '@/types'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { scheduleSyncDebounced, pushChanges, getClientId } from '@/sync'
+import { uuid } from '@/utils/uuid'
 
 /** 指定牌组所有卡片（响应式） */
 export function useCards(deckId: string) {
@@ -21,7 +22,7 @@ export async function createCard(
   back: string,
   tags: string[] = []
 ): Promise<string> {
-  const id  = crypto.randomUUID()
+  const id  = uuid()
   const now = Date.now()
   const fsrs = newCardFSRSState()
 
@@ -85,7 +86,7 @@ export async function bulkImportCards(deckId: string, rows: ImportRow[]): Promis
   const cards: Card[] = rows.map(row => {
     const fsrs = newCardFSRSState()
     return {
-      id: crypto.randomUUID(),
+      id: uuid(),
       deck_id: deckId,
       front: { type: 'text', text: row.front },
       back:  { type: 'text', text: row.back },
@@ -117,7 +118,7 @@ export async function submitReview(
       updated_at:  now.getTime(),
     })
     await db.reviewLogs.add({
-      id:                 crypto.randomUUID(),
+      id:                 uuid(),
       card_id:            card.id,
       deck_id:            card.deck_id,
       rating,

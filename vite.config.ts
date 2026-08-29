@@ -4,6 +4,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: 'all',   // 允许所有 host（局域网/Tailscale）
+  },
   plugins: [
     react(),
     VitePWA({

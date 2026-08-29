@@ -1,13 +1,14 @@
 import { db } from '@/db'
 import { pushChanges, pullChanges } from './api'
 import type { Deck, Card, ReviewLog } from '@/types'
+import { uuid } from '@/utils/uuid'
 
 // ── 持久化 client_id 和 last_sync_at ──────────────────────────────────────────
 
 export function getClientId(): string {
   let id = localStorage.getItem('flashmind_client_id')
   if (!id) {
-    id = crypto.randomUUID()
+    id = uuid()
     localStorage.setItem('flashmind_client_id', id)
   }
   return id
@@ -106,6 +107,7 @@ export async function sync(): Promise<'ok' | 'offline' | 'error'> {
     return 'ok'
   } catch (e) {
     console.error('[sync] error:', e)
+    ;(window as any).__lastSyncError = String(e)
     return 'error'
   } finally {
     isSyncing = false

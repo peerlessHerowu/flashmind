@@ -24,6 +24,10 @@ export default defineConfig({
       use: { browserName: 'chromium', viewport: { width: 390, height: 844 } },
     },
     {
+      name: 'mobile-safari',
+      use: { browserName: 'webkit', viewport: { width: 390, height: 844 } },
+    },
+    {
       name: 'desktop-chrome',
       use: { browserName: 'chromium', viewport: { width: 1280, height: 800 } },
     },
