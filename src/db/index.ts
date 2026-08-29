@@ -23,7 +23,7 @@ class FlashMindDB extends Dexie {
 
 export const db = new FlashMindDB()
 
-// 初始化默认设置
+// 初始化默认设置（幂等，put = upsert，并发安全）
 export async function ensureSettings(): Promise<Settings> {
   const existing = await db.settings.get('default')
   if (existing) return existing
@@ -37,6 +37,6 @@ export async function ensureSettings(): Promise<Settings> {
     reminder_enabled: false,
     updated_at: Date.now(),
   }
-  await db.settings.add(defaults)
+  await db.settings.put(defaults)
   return defaults
 }
