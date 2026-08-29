@@ -6,7 +6,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 /** 所有未归档牌组（响应式） */
 export function useDecks() {
   return useLiveQuery(
-    () => db.decks.where('is_archived').equals(0).sortBy('created_at'),
+    () => db.decks.filter(d => !d.is_archived).sortBy('created_at'),
     [],
     []
   )
