@@ -3,6 +3,7 @@ import { applyRating, newCardFSRSState } from '@/algorithm/fsrs'
 import type { Card, ImportRow } from '@/types'
 import { Rating } from '@/types'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { scheduleSyncDebounced, pushChanges, getClientId } from '@/sync'
 
 /** 指定牌组所有卡片（响应式） */
 export function useCards(deckId: string) {
@@ -36,6 +37,7 @@ export async function createCard(
     ...fsrs,
   }
   await db.cards.add(card)
+  scheduleSyncDebounced()
   return id
 }
 
@@ -49,10 +51,23 @@ export async function updateCard(
   if (data.back  !== undefined) updates.back  = { type: 'text', text: data.back }
   if (data.tags  !== undefined) updates.tags  = data.tags
   await db.cards.update(id, updates)
+  scheduleSyncDebounced()
 }
 
 /** 删除卡片 */
 export async function deleteCard(id: string) {
+  const now = Date.now()
+  // 先通知服务端软删除
+  const card = await db.cards.get(id)
+  if (card) {
+    await pushChanges({
+      client_id: getClientId(),
+      decks: [],
+      cards: [{ ...card, deleted_at: now, updated_at: now }],
+      review_logs: [],
+    })
+  }
+  // 本地硬删
   await db.transaction('rw', db.cards, db.reviewLogs, async () => {
     await db.reviewLogs.where('card_id').equals(id).delete()
     await db.cards.delete(id)
@@ -82,6 +97,7 @@ export async function bulkImportCards(deckId: string, rows: ImportRow[]): Promis
     }
   })
   await db.cards.bulkAdd(cards)
+  scheduleSyncDebounced()
   return cards.length
 }
 
@@ -115,4 +131,5 @@ export async function submitReview(
       reviewed_at:        now.getTime(),
     })
   })
+  scheduleSyncDebounced()
 }

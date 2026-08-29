@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Moon, Sun, Monitor, Download, Upload, ChevronRight } from 'lucide-react'
+import { Moon, Sun, Monitor, Download, Upload, ChevronRight, RefreshCw, Wifi, WifiOff, AlertCircle, CheckCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { db, ensureSettings } from '@/db'
 import { useAppStore } from '@/store/useAppStore'
+import { useSyncStore } from '@/sync'
+import { checkStatus } from '@/sync/api'
 import type { Settings as SettingsType } from '@/types'
 import { cn } from '@/utils/cn'
 import toast from 'react-hot-toast'
@@ -51,8 +53,42 @@ function NumberRow({ label, value, onChange, min, max }: { label: string; value:
 export function Settings() {
   const { theme, setTheme } = useAppStore()
   const [settings, setSettings] = useState<SettingsType | null>(null)
+  const { status, lastSyncAt, errorMsg, serverUrl, setServerUrl, triggerSync } = useSyncStore()
+  const [urlInput, setUrlInput] = useState(serverUrl)
+  const [testing, setTesting] = useState(false)
 
   useEffect(() => { ensureSettings().then(setSettings) }, [])
+  useEffect(() => { setUrlInput(serverUrl) }, [serverUrl])
+
+  async function handleTestConnection() {
+    setTesting(true)
+    const result = await checkStatus()
+    setTesting(false)
+    if (result?.ok) {
+      toast.success(`服务器正常，共 ${result.total_cards} 张卡片`)
+    } else {
+      toast.error('无法连接服务器，请检查地址')
+    }
+  }
+
+  // 同步状态显示配置
+  const statusConfig = {
+    idle:    { icon: <RefreshCw size={14} />,   text: '等待同步', color: 'text-gray-400' },
+    syncing: { icon: <RefreshCw size={14} className="animate-spin" />, text: '同步中...', color: 'text-blue-500' },
+    synced:  { icon: <CheckCircle size={14} />, text: '已同步', color: 'text-green-500' },
+    error:   { icon: <AlertCircle size={14} />, text: '同步出错', color: 'text-red-500' },
+    offline: { icon: <WifiOff size={14} />,     text: '服务器不可达', color: 'text-orange-500' },
+  }
+  const sc = statusConfig[status]
+
+  function formatSyncTime(ts: number) {
+    if (!ts) return '从未同步'
+    const diff = Date.now() - ts
+    if (diff < 60000) return '刚刚'
+    if (diff < 3600000) return `${Math.floor(diff / 60000)} 分钟前`
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)} 小时前`
+    return new Date(ts).toLocaleDateString('zh-CN')
+  }
 
   async function save(patch: Partial<SettingsType>) {
     if (!settings) return
@@ -137,6 +173,59 @@ export function Settings() {
             </div>
           </section>
         )}
+
+        {/* 云端同步 */}
+        <section>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">云端同步</p>
+          <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 p-4 space-y-4">
+            {/* 服务器地址 */}
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">服务器地址</p>
+              <div className="flex gap-2">
+                <input
+                  value={urlInput}
+                  onChange={e => setUrlInput(e.target.value)}
+                  onBlur={() => setServerUrl(urlInput)}
+                  placeholder="http://100.99.x.x:3002"
+                  className="flex-1 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                />
+                <button
+                  onClick={handleTestConnection}
+                  disabled={testing}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium bg-gray-100 dark:bg-white/8 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/12 transition-colors disabled:opacity-50"
+                >
+                  {testing ? <RefreshCw size={14} className="animate-spin" /> : <Wifi size={14} />}
+                  测试
+                </button>
+              </div>
+            </div>
+
+            {/* 状态行 */}
+            <div className="flex items-center justify-between">
+              <div className={cn('flex items-center gap-1.5 text-sm', sc.color)}>
+                {sc.icon}
+                <span>{sc.text}</span>
+                {lastSyncAt > 0 && status !== 'syncing' && (
+                  <span className="text-xs text-gray-400 ml-1">· {formatSyncTime(lastSyncAt)}</span>
+                )}
+              </div>
+            </div>
+
+            {errorMsg && (
+              <p className="text-xs text-red-400">{errorMsg}</p>
+            )}
+
+            {/* 立即同步按钮 */}
+            <button
+              onClick={() => triggerSync()}
+              disabled={status === 'syncing'}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary-500 text-white text-sm font-medium hover:bg-primary-600 active:bg-primary-700 disabled:opacity-50 transition-colors"
+            >
+              <RefreshCw size={15} className={status === 'syncing' ? 'animate-spin' : ''} />
+              {status === 'syncing' ? '同步中...' : '立即同步'}
+            </button>
+          </div>
+        </section>
 
         {/* 数据管理 */}
         <section>

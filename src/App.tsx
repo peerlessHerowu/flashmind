@@ -5,13 +5,15 @@ import { router } from './router'
 import { useAppStore } from './store/useAppStore'
 import { ensureSettings } from './db'
 import { PWAInstallPrompt } from './components/ui/PWAInstallPrompt'
+import { initAutoSync } from './sync'
 
 export default function App() {
   const { theme, setTheme } = useAppStore()
 
-  // 启动时同步主题
+  // 启动时同步主题 + 初始化自动同步
   useEffect(() => {
     ensureSettings().then(s => setTheme(s.theme))
+    initAutoSync()
   }, [setTheme])
 
   // 应用主题

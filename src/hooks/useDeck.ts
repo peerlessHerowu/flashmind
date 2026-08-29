@@ -2,6 +2,7 @@ import { db } from '@/db'
 import type { Deck, DeckStats } from '@/types'
 import { CardState } from '@/types'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { scheduleSyncDebounced, pushChanges, getClientId } from '@/sync'
 
 /** 所有未归档牌组（响应式） */
 export function useDecks() {
@@ -22,16 +23,30 @@ export async function createDeck(data: Omit<Deck, 'id' | 'created_at' | 'updated
   const id = crypto.randomUUID()
   const now = Date.now()
   await db.decks.add({ ...data, id, created_at: now, updated_at: now })
+  scheduleSyncDebounced()
   return id
 }
 
 /** 更新牌组 */
 export async function updateDeck(id: string, data: Partial<Omit<Deck, 'id' | 'created_at'>>) {
   await db.decks.update(id, { ...data, updated_at: Date.now() })
+  scheduleSyncDebounced()
 }
 
 /** 删除牌组及其所有卡片 */
 export async function deleteDeck(id: string) {
+  const now = Date.now()
+  // 1. 先通知服务端软删除
+  const deck = await db.decks.get(id)
+  if (deck) {
+    await pushChanges({
+      client_id: getClientId(),
+      decks: [{ ...deck, deleted_at: now, updated_at: now }],
+      cards: [],
+      review_logs: [],
+    })
+  }
+  // 2. 本地硬删
   await db.transaction('rw', db.decks, db.cards, db.reviewLogs, async () => {
     const cardIds = await db.cards.where('deck_id').equals(id).primaryKeys()
     await db.reviewLogs.where('card_id').anyOf(cardIds as string[]).delete()
