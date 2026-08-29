@@ -39,17 +39,17 @@ export function DeckCard({ deck, onClick }: DeckCardProps) {
           {deck.emoji && (
             <span className="text-lg leading-none mt-0.5 shrink-0">{deck.emoji}</span>
           )}
-          <span className="text-[13px] font-semibold text-paper-900 dark:text-white leading-snug line-clamp-2 tracking-tight">
+          <span className="text-[13px] font-semibold text-paper-900 dark:text-gray-100 leading-snug line-clamp-2 tracking-tight">
             {deck.name}
           </span>
         </div>
 
         {/* 底部统计行 */}
         <div className="flex items-center justify-between">
-          <span className="text-[11px] text-paper-500 dark:text-ink-500 tabular-nums">
+          <span className="text-[11px] text-paper-500 dark:text-gray-400 tabular-nums">
             {total} 张
             {total > 0 && masteredPct > 0 && (
-              <span className="ml-1 text-primary-500">· {masteredPct}%</span>
+              <span className="ml-1 text-primary-600 dark:text-primary-400">· {masteredPct}%</span>
             )}
           </span>
           {hasDue && (

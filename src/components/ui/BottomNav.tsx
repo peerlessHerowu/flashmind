@@ -18,19 +18,16 @@ export function BottomNav() {
           to={to}
           end={to === '/'}
           className={({ isActive }) => cn(
-            'flex flex-col items-center gap-0.5 px-5 py-1.5 rounded-lg transition-colors',
+            'flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 min-w-[52px] rounded-lg transition-colors',
             isActive
               ? 'text-primary-500'
-              : 'text-paper-400 dark:text-ink-500'
+              : 'text-paper-500 dark:text-ink-400'
           )}
         >
           {({ isActive }) => (
             <>
-              <Icon size={21} strokeWidth={isActive ? 2.5 : 1.75} />
-              <span className={cn(
-                'text-[10px] font-medium transition-opacity',
-                isActive ? 'opacity-100' : 'opacity-0 w-0 h-0 overflow-hidden'
-              )}>
+              <Icon size={22} strokeWidth={isActive ? 2.5 : 1.75} />
+              <span className="text-[10px] font-medium mt-0.5">
                 {label}
               </span>
             </>

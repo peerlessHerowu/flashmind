@@ -68,7 +68,7 @@ export function Home() {
           className={cn(
             'rounded-xl p-5',
             total > 0
-              ? 'bg-ink-950 dark:bg-ink-900 border border-ink-700/60'
+              ? 'bg-gray-800 dark:bg-ink-900 border border-gray-700/60 dark:border-ink-700/60'
               : 'bg-white dark:bg-ink-900 border border-paper-200 dark:border-ink-700/60'
           )}
         >
@@ -76,7 +76,7 @@ export function Home() {
             <div>
               <p className={cn(
                 'text-[11px] font-semibold uppercase tracking-widest mb-1',
-                total > 0 ? 'text-ink-500' : 'text-paper-500 dark:text-ink-500'
+                total > 0 ? 'text-gray-400' : 'text-paper-500 dark:text-ink-500'
               )}>
                 今日待复习
               </p>
@@ -89,7 +89,7 @@ export function Home() {
                 </span>
                 <span className={cn(
                   'text-base font-normal',
-                  total > 0 ? 'text-ink-500' : 'text-paper-400 dark:text-ink-600'
+                  total > 0 ? 'text-gray-400' : 'text-paper-400 dark:text-ink-600'
                 )}>张</span>
               </div>
             </div>
@@ -98,12 +98,12 @@ export function Home() {
             {total > 0 && (
               <div className="text-right space-y-1 mt-1">
                 {dueCount > 0 && (
-                  <p className="text-[11px] text-ink-400 tabular-nums">
+                  <p className="text-[11px] text-gray-400 tabular-nums">
                     <span className="text-red-400 font-semibold">{dueCount}</span> 到期
                   </p>
                 )}
                 {newCount > 0 && (
-                  <p className="text-[11px] text-ink-400 tabular-nums">
+                  <p className="text-[11px] text-gray-400 tabular-nums">
                     <span className="text-primary-400 font-semibold">{newCount}</span> 新卡
                   </p>
                 )}
@@ -124,7 +124,7 @@ export function Home() {
           </Button>
 
           {todayDone > 0 && (
-            <p className="text-center text-[11px] text-ink-500 mt-2.5 tabular-nums">
+            <p className="text-center text-[11px] text-gray-400 mt-2.5 tabular-nums">
               今日已复习 {todayDone} 张
             </p>
           )}
