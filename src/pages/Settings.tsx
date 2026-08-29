@@ -133,8 +133,8 @@ export function Settings() {
   ]
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
-      <header className="sticky top-0 z-20 px-5 pt-safe-top pb-3 pt-5 bg-gray-50/80 dark:bg-gray-950/80 backdrop-blur-md">
+    <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
+      <header className="sticky top-0 z-20 px-5 pt-safe-top pb-3 pt-5 bg-gray-50/80 dark:bg-ink-950/80 backdrop-blur-md">
         <h1 className="text-xl font-bold text-gray-900 dark:text-white">设置</h1>
       </header>
 
@@ -142,7 +142,7 @@ export function Settings() {
         {/* 外观 */}
         <section>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">外观</p>
-          <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 p-4">
+          <div className="rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4">
             <div className="grid grid-cols-3 gap-2">
               {THEMES.map(t => (
                 <button
@@ -167,7 +167,7 @@ export function Settings() {
         {settings && (
           <section>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">学习参数</p>
-            <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 px-4 divide-y divide-gray-100 dark:divide-white/6">
+            <div className="rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark px-4 divide-y divide-gray-100 dark:divide-white/6">
               <NumberRow label="每日复习上限" value={settings.daily_review_limit} onChange={v => save({ daily_review_limit: v })} min={10} max={1000} />
               <NumberRow label="每日新卡上限" value={settings.daily_new_limit} onChange={v => save({ daily_new_limit: v })} min={1} max={100} />
             </div>
@@ -177,7 +177,7 @@ export function Settings() {
         {/* 云端同步 */}
         <section>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">云端同步</p>
-          <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 p-4 space-y-4">
+          <div className="rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4 space-y-4">
             {/* 服务器地址 */}
             <div className="space-y-1.5">
               <p className="text-xs font-medium text-gray-500 dark:text-gray-400">服务器地址</p>
@@ -230,7 +230,7 @@ export function Settings() {
         {/* 数据管理 */}
         <section>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">数据管理</p>
-          <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 overflow-hidden">
+          <div className="rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark overflow-hidden">
             <button
               onClick={handleExport}
               className="flex items-center gap-3 w-full px-4 py-4 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"

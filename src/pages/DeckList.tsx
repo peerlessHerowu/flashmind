@@ -13,8 +13,8 @@ export function DeckList() {
   const [show, setShow] = useState(false)
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
-      <header className="sticky top-0 z-20 flex items-center justify-between px-5 pt-safe-top pb-3 pt-5 bg-gray-50/80 dark:bg-gray-950/80 backdrop-blur-md">
+    <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
+      <header className="sticky top-0 z-20 flex items-center justify-between px-5 pt-safe-top pb-3 pt-5 bg-gray-50/80 dark:bg-ink-950/80 backdrop-blur-md">
         <h1 className="text-xl font-bold text-gray-900 dark:text-white">我的牌组</h1>
         <button
           onClick={() => setShow(true)}

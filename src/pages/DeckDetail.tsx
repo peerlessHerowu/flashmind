@@ -90,9 +90,9 @@ export function DeckDetail() {
   if (!deck) return null
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
       {/* 顶栏 */}
-      <header className="sticky top-0 z-20 flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4 bg-gray-50/80 dark:bg-gray-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-20 flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4 bg-gray-50/80 dark:bg-ink-950/80 backdrop-blur-md">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl text-gray-500 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors">
           <ArrowLeft size={20} />
         </button>
@@ -112,7 +112,7 @@ export function DeckDetail() {
                 initial={{ opacity: 0, scale: 0.95, y: -4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="absolute right-0 top-full mt-1 w-44 rounded-xl bg-white dark:bg-gray-800 shadow-modal border border-gray-100 dark:border-white/8 z-30 overflow-hidden"
+                className="absolute right-0 top-full mt-1 w-44 rounded-xl bg-white dark:bg-ink-800 shadow-modal border border-gray-100 dark:border-white/8 z-30 overflow-hidden"
                 onMouseLeave={() => setShowMenu(false)}
               >
                 <button onClick={() => { setShowImport(true); setShowMenu(false) }}
@@ -137,7 +137,7 @@ export function DeckDetail() {
         {/* Banner */}
         <div className="rounded-2xl overflow-hidden">
           <div className="h-2 w-full" style={{ backgroundColor: deck.color }} />
-          <div className="bg-white dark:bg-gray-900 p-4 space-y-3">
+          <div className="bg-white dark:bg-ink-900 p-4 space-y-3">
             <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
               <span>{stats?.total ?? 0} 张卡片</span>
               {dueCount > 0 && <span className="text-red-500 font-medium">{dueCount} 到期</span>}
@@ -191,7 +191,7 @@ export function DeckDetail() {
             {filtered.map(card => (
               <motion.li key={card.id}
                 variants={{ hidden: { opacity: 0, x: -8 }, show: { opacity: 1, x: 0 } }}
-                className="flex items-center gap-3 bg-white dark:bg-gray-900 rounded-xl px-4 py-3 shadow-card dark:border dark:border-white/6"
+                className="flex items-center gap-3 bg-white dark:bg-ink-900 rounded-xl px-4 py-3 shadow-card dark:border dark:border-white/6"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{card.front.text}</p>

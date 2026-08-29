@@ -72,9 +72,9 @@ export function CardEditor() {
   const canSave = front.trim().length > 0 && back.trim().length > 0
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
       {/* 顶栏 */}
-      <header className="sticky top-0 z-20 flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4 bg-gray-50/80 dark:bg-gray-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-20 flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4 bg-gray-50/80 dark:bg-ink-950/80 backdrop-blur-md">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl text-gray-500 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors">
           <ArrowLeft size={20} />
         </button>
@@ -95,7 +95,7 @@ export function CardEditor() {
 
       <main className="flex-1 px-4 pb-8 space-y-4 mt-2">
         {/* 正面 */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">正面</p>
           <Textarea
             ref={frontRef}
@@ -109,7 +109,7 @@ export function CardEditor() {
         </div>
 
         {/* 背面 */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">背面</p>
           <Textarea
             value={back}
@@ -121,7 +121,7 @@ export function CardEditor() {
         </div>
 
         {/* 标签 */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">标签（可选）</p>
           <input
             value={tags}

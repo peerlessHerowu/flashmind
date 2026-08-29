@@ -128,12 +128,12 @@ export function Review() {
   // ── 完成页 ──────────────────────────────────────────────────────────────────
   if (done) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-950 px-6 text-center gap-6">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-paper-50 dark:bg-ink-950 px-6 text-center gap-6">
         {showConfetti && <Confetti />}
         <div className="space-y-2">
           <p className="text-6xl">🎉</p>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">今日复习完成！</h2>
-          <p className="text-gray-500 dark:text-gray-400">共复习 {history.length} 张卡片</p>
+          <h2 className="text-2xl font-bold text-paper-900 dark:text-white">今日复习完成！</h2>
+          <p className="text-paper-500 dark:text-ink-400">共复习 {history.length} 张卡片</p>
         </div>
         <div className="grid grid-cols-2 gap-3 w-full max-w-xs text-center">
           {Object.entries(
@@ -150,7 +150,7 @@ export function Review() {
         </div>
         <button
           onClick={() => navigate('/')}
-          className="w-full max-w-xs rounded-xl bg-primary-500 text-white py-3.5 font-semibold"
+          className="w-full max-w-xs rounded-xl bg-primary-500 text-ink-950 py-3.5 font-bold"
         >
           回首页
         </button>
@@ -160,7 +160,7 @@ export function Review() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="flex items-center justify-center min-h-screen bg-paper-50 dark:bg-ink-950">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
       </div>
     )
@@ -171,27 +171,27 @@ export function Review() {
   const progress = queue.length > 0 ? ((index) / queue.length) * 100 : 0
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
       {/* 顶栏 */}
       <header className="flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 -ml-2 rounded-xl text-gray-400 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors"
+          className="p-2 -ml-2 rounded-xl text-paper-400 dark:text-ink-500 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors"
         >
           <ArrowLeft size={20} />
         </button>
-        <div className="flex-1 h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+        <div className="flex-1 h-1.5 rounded-full bg-paper-200 dark:bg-ink-700 overflow-hidden">
           <motion.div
             className="h-full rounded-full bg-primary-500"
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
           />
         </div>
-        <span className="text-sm text-gray-400 tabular-nums min-w-[48px] text-right">
+        <span className="text-sm text-paper-400 dark:text-ink-500 tabular-nums min-w-[48px] text-right">
           {index}/{queue.length}
         </span>
         {history.length > 0 && (
-          <button onClick={handleUndo} className="p-2 rounded-xl text-gray-400 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors" aria-label="撤销">
+          <button onClick={handleUndo} className="p-2 rounded-xl text-paper-400 dark:text-ink-500 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors" aria-label="撤销">
             <RotateCcw size={16} />
           </button>
         )}
@@ -254,7 +254,7 @@ export function Review() {
                     {label}
                   </span>
                   {previews && (
-                    <span className={cn('text-[10px]', ratingLoading === rating ? 'text-white/80' : 'text-gray-400')}>
+                    <span className={cn('text-[10px]', ratingLoading === rating ? 'text-white/80' : 'text-paper-400 dark:text-ink-500')}>
                       {formatNextReview(previews[rating])}
                     </span>
                   )}
@@ -298,24 +298,24 @@ function FlashCard({ card, flipped, onFlip }: FlashCardProps) {
       >
         {/* 正面 */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 p-8"
+          className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <p className="text-2xl font-semibold text-gray-900 dark:text-white text-center leading-relaxed">
+          <p className="text-2xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed">
             {card.front.text}
           </p>
-          <p className="mt-6 text-xs text-gray-300 dark:text-gray-600">点击翻转</p>
+          <p className="mt-6 text-xs text-paper-300 dark:text-ink-600">点击翻转</p>
         </div>
 
         {/* 背面 */}
         <div
-          className="absolute inset-0 flex flex-col rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:border dark:border-white/6 p-8 overflow-hidden"
+          className="absolute inset-0 flex flex-col rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8 overflow-hidden"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <p className="text-sm font-medium text-gray-400 dark:text-gray-500 text-center">{card.front.text}</p>
-          <div className="my-4 h-px bg-gray-100 dark:bg-white/8" />
+          <p className="text-sm font-medium text-paper-400 dark:text-ink-500 dark:text-gray-500 text-center">{card.front.text}</p>
+          <div className="my-4 h-px bg-paper-100 dark:bg-ink-800" />
           <div className="flex-1 flex items-center justify-center">
-            <p className="text-xl font-semibold text-gray-900 dark:text-white text-center leading-relaxed">
+            <p className="text-xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed">
               {card.back.text}
             </p>
           </div>

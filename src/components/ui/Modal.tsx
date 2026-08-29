@@ -35,7 +35,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
           <motion.div
             className={cn(
               'relative w-full max-w-md rounded-2xl',
-              'bg-white dark:bg-gray-900',
+              'bg-white dark:bg-ink-900',
               'shadow-modal',
               'z-10',
               className
