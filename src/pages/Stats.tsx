@@ -10,7 +10,7 @@ function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label:
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex-1 rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4 flex flex-col gap-2"
+      className="flex-1 rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4 flex flex-col gap-2"
     >
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${color}`}>
         {icon}
@@ -49,7 +49,7 @@ export function Stats() {
 
   return (
     <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
-      <header className="sticky top-0 z-20 px-5 pt-safe-top pb-3 pt-5 bg-gray-50/80 dark:bg-ink-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-20 px-5 pt-safe-top pb-3 pt-5 bg-paper-50/90 dark:bg-ink-950/90 backdrop-blur-md">
         <h1 className="text-xl font-bold text-gray-900 dark:text-white">学习统计</h1>
       </header>
 
@@ -64,7 +64,7 @@ export function Stats() {
         {/* 30天趋势 */}
         <section>
           <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">过去 30 天复习量</h2>
-          <div className="rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4">
+          <div className="rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4">
             {bars.every(b => b.count === 0) ? (
               <div className="flex items-center justify-center h-32 text-sm text-gray-400">还没有复习记录</div>
             ) : (
@@ -92,7 +92,7 @@ export function Stats() {
         {decks.length > 0 && (
           <section>
             <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">各牌组掌握情况</h2>
-            <div className="rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4 space-y-4">
+            <div className="rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-4 space-y-4">
               {decks.map(deck => <DeckStatRow key={deck.id} deckId={deck.id} />)}
             </div>
           </section>

@@ -41,7 +41,7 @@ export function PWAInstallPrompt() {
           transition={{ type: 'spring', damping: 24, stiffness: 300 }}
           className="fixed bottom-20 left-4 right-4 z-50 mx-auto max-w-sm"
         >
-          <div className="flex items-center gap-3 rounded-2xl bg-gray-900 dark:bg-gray-800 p-4 shadow-modal">
+          <div className="flex items-center gap-3 rounded-2xl bg-ink-900 dark:bg-ink-800 p-4 shadow-modal">
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary-500">
               <Download size={18} className="text-white" />
             </div>

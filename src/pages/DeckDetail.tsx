@@ -92,7 +92,7 @@ export function DeckDetail() {
   return (
     <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
       {/* 顶栏 */}
-      <header className="sticky top-0 z-20 flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4 bg-gray-50/80 dark:bg-ink-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-20 flex items-center gap-3 px-4 pt-safe-top pb-3 pt-4 bg-paper-50/90 dark:bg-ink-950/90 backdrop-blur-md">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl text-gray-500 hover:bg-gray-200 dark:hover:bg-white/8 transition-colors">
           <ArrowLeft size={20} />
         </button>

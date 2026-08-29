@@ -46,11 +46,11 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             transition={{ type: 'spring', damping: 28, stiffness: 360 }}
           >
             {title && (
-              <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 dark:border-white/8">
-                <h2 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h2>
+              <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-paper-200 dark:border-ink-800">
+                <h2 className="text-base font-semibold text-paper-900 dark:text-white">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                  className="p-1.5 rounded-lg text-paper-500 hover:text-paper-700 hover:bg-paper-100 dark:text-ink-400 dark:hover:bg-ink-800 transition-colors"
                   aria-label="关闭"
                 >
                   <X size={18} />

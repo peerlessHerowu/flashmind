@@ -77,7 +77,7 @@ export function DeckFormModal({ open, onClose, deck }: DeckFormModalProps) {
 
         {/* emoji 选择 */}
         <div>
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">图标</p>
+          <p className="text-xs font-medium text-paper-500 dark:text-ink-400 mb-2">图标</p>
           <div className="flex flex-wrap gap-2">
             {EMOJIS.map(e => (
               <button
@@ -88,7 +88,7 @@ export function DeckFormModal({ open, onClose, deck }: DeckFormModalProps) {
                   'h-9 w-9 rounded-xl text-lg transition-all',
                   emoji === e
                     ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-500/10 scale-110'
-                    : 'hover:bg-gray-100 dark:hover:bg-white/5'
+                    : 'hover:bg-paper-100 dark:hover:bg-ink-800'
                 )}
               >
                 {e}
@@ -99,7 +99,7 @@ export function DeckFormModal({ open, onClose, deck }: DeckFormModalProps) {
 
         {/* 颜色选择 */}
         <div>
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">颜色</p>
+          <p className="text-xs font-medium text-paper-500 dark:text-ink-400 mb-2">颜色</p>
           <div className="flex flex-wrap gap-2">
             {DECK_COLORS.map(c => (
               <button
@@ -108,7 +108,7 @@ export function DeckFormModal({ open, onClose, deck }: DeckFormModalProps) {
                 onClick={() => setColor(c)}
                 className={cn(
                   'h-7 w-7 rounded-full transition-transform',
-                  color === c ? 'scale-125 ring-2 ring-offset-2 ring-gray-300 dark:ring-gray-600' : 'hover:scale-110'
+                  color === c ? 'scale-125 ring-2 ring-offset-2 ring-paper-300 dark:ring-ink-600' : 'hover:scale-110'
                 )}
                 style={{ backgroundColor: c }}
                 aria-label={c}

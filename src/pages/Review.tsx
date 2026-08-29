@@ -298,7 +298,7 @@ function FlashCard({ card, flipped, onFlip }: FlashCardProps) {
       >
         {/* 正面 */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8"
+          className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8"
           style={{ backfaceVisibility: 'hidden' }}
         >
           <p className="text-2xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed">
@@ -309,7 +309,7 @@ function FlashCard({ card, flipped, onFlip }: FlashCardProps) {
 
         {/* 背面 */}
         <div
-          className="absolute inset-0 flex flex-col rounded-2xl bg-white dark:bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8 overflow-hidden"
+          className="absolute inset-0 flex flex-col rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8 overflow-hidden"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <p className="text-sm font-medium text-paper-400 dark:text-ink-500 dark:text-gray-500 text-center">{card.front.text}</p>
