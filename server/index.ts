@@ -1,6 +1,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { syncRoutes } from './routes/sync.ts'
+import { ttsRoutes } from './routes/tts.ts'
 
 const app = Fastify({ logger: { level: 'info' } })
 
@@ -14,6 +15,9 @@ app.get('/health', async () => ({ ok: true, time: Date.now() }))
 
 // 同步路由
 await app.register(syncRoutes)
+
+// TTS 路由
+await app.register(ttsRoutes)
 
 const PORT = Number(process.env.PORT ?? 3002)
 const HOST = process.env.HOST ?? '0.0.0.0'

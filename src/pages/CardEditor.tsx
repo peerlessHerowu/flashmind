@@ -6,6 +6,8 @@ import { createCard, updateCard, deleteCard } from '@/hooks/useCard'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Input'
 import { Modal } from '@/components/ui/Modal'
+import { ClozeCard } from '@/components/review/ClozeCard'
+import { isValidCloze } from '@/utils/cloze'
 import type { Card } from '@/types'
 import toast from 'react-hot-toast'
 
@@ -19,6 +21,7 @@ export function CardEditor() {
   const [front, setFront]     = useState('')
   const [back, setBack]       = useState('')
   const [tags, setTags]       = useState('')
+  const [cardType, setCardType] = useState<'basic' | 'cloze'>('basic')
   const [loading, setLoading] = useState(false)
   const [showDel, setShowDel] = useState(false)
   const [card, setCard]       = useState<Card | null>(null)
@@ -27,7 +30,13 @@ export function CardEditor() {
   useEffect(() => {
     if (!isNew && id) {
       db.cards.get(id).then(c => {
-        if (c) { setCard(c); setFront(c.front.text); setBack(c.back.text); setTags(c.tags.join('; ')) }
+        if (c) {
+          setCard(c)
+          setFront(c.front.text)
+          setBack(c.back.text)
+          setTags(c.tags.join('; '))
+          setCardType(c.card_type ?? 'basic')
+        }
       })
     }
   }, [id, isNew])
@@ -42,17 +51,25 @@ export function CardEditor() {
   })
 
   async function handleSave() {
-    if (!front.trim() || !back.trim()) return
+    if (!front.trim()) return
+    if (cardType === 'basic' && !back.trim()) return
+
+    // cloze 类型校验
+    if (cardType === 'cloze' && !isValidCloze(front)) {
+      toast.error('Cloze 卡片需要至少一个 {{c1::...}} 填空标记')
+      return
+    }
+
     setLoading(true)
     try {
       const parsedTags = tags.split(/[;，,]/).map(t => t.trim()).filter(Boolean)
       if (isNew) {
-        await createCard(deckId, front.trim(), back.trim(), parsedTags)
+        await createCard(deckId, front.trim(), back.trim(), parsedTags, cardType)
         toast.success('卡片已保存')
         setFront(''); setBack(''); setTags('')
         frontRef.current?.focus()
       } else {
-        await updateCard(id!, { front: front.trim(), back: back.trim(), tags: parsedTags })
+        await updateCard(id!, { front: front.trim(), back: back.trim(), tags: parsedTags, card_type: cardType })
         toast.success('已更新')
         navigate(-1)
       }
@@ -69,7 +86,9 @@ export function CardEditor() {
     navigate(-1)
   }
 
-  const canSave = front.trim().length > 0 && back.trim().length > 0
+  const canSave = cardType === 'cloze'
+    ? front.trim().length > 0
+    : front.trim().length > 0 && back.trim().length > 0
 
   return (
     <div className="flex flex-col min-h-screen bg-paper-50 dark:bg-ink-950">
@@ -94,31 +113,69 @@ export function CardEditor() {
       </header>
 
       <main className="flex-1 px-4 pb-8 space-y-4 mt-2">
+        {/* 卡片类型切换 */}
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 shadow-card dark:border dark:border-white/6">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">卡片类型</p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setCardType('basic')}
+              className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
+                cardType === 'basic'
+                  ? 'bg-primary-500 text-ink-950'
+                  : 'bg-paper-100 dark:bg-ink-800 text-paper-600 dark:text-ink-300'
+              }`}
+            >
+              Basic
+            </button>
+            <button
+              type="button"
+              onClick={() => setCardType('cloze')}
+              className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
+                cardType === 'cloze'
+                  ? 'bg-primary-500 text-ink-950'
+                  : 'bg-paper-100 dark:bg-ink-800 text-paper-600 dark:text-ink-300'
+              }`}
+            >
+              Cloze 填空
+            </button>
+          </div>
+        </div>
+
         {/* 正面 */}
         <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">正面</p>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+            {cardType === 'cloze' ? '填空句子' : '正面'}
+          </p>
           <Textarea
             ref={frontRef}
             value={front}
             onChange={e => setFront(e.target.value)}
-            placeholder="输入正面内容..."
+            placeholder={cardType === 'cloze' ? '例：The city was {{c1::abandoned}} after the flood.' : '输入正面内容...'}
             rows={4}
             autoFocus={isNew}
             className="border-0 p-0 text-base font-medium bg-transparent focus:ring-0 resize-none"
           />
+          {cardType === 'cloze' && (
+            <p className="text-xs text-paper-400 dark:text-ink-500">
+              使用 <code className="rounded bg-paper-100 dark:bg-ink-800 px-1">{'{{c1::单词}}'}</code> 语法标记填空位置
+            </p>
+          )}
         </div>
 
-        {/* 背面 */}
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">背面</p>
-          <Textarea
-            value={back}
-            onChange={e => setBack(e.target.value)}
-            placeholder="输入背面内容..."
-            rows={4}
-            className="border-0 p-0 text-base bg-transparent focus:ring-0 resize-none"
-          />
-        </div>
+        {/* 背面（Basic 专属） */}
+        {cardType === 'basic' && (
+          <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">背面</p>
+            <Textarea
+              value={back}
+              onChange={e => setBack(e.target.value)}
+              placeholder="输入背面内容..."
+              rows={4}
+              className="border-0 p-0 text-base bg-transparent focus:ring-0 resize-none"
+            />
+          </div>
+        )}
 
         {/* 标签 */}
         <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 space-y-2 shadow-card dark:border dark:border-white/6">
@@ -132,7 +189,26 @@ export function CardEditor() {
         </div>
 
         {/* 预览 */}
-        {(front || back) && (
+        {cardType === 'cloze' && front && (
+          <div className="rounded-2xl bg-primary-50 dark:bg-primary-500/8 p-4 space-y-3">
+            <p className="text-xs font-semibold text-primary-400 uppercase tracking-wide">预览效果</p>
+            <div className="space-y-2">
+              <p className="text-[11px] text-primary-400">填空状态（复习时）：</p>
+              <div className="leading-relaxed">
+                <ClozeCard text={front} revealed={false} onReveal={() => {}} />
+              </div>
+            </div>
+            <div className="h-px bg-primary-200 dark:bg-primary-500/20" />
+            <div className="space-y-2">
+              <p className="text-[11px] text-primary-400">揭示状态（答案）：</p>
+              <div className="leading-relaxed">
+                <ClozeCard text={front} revealed={true} onReveal={() => {}} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {cardType === 'basic' && (front || back) && (
           <div className="rounded-2xl bg-primary-50 dark:bg-primary-500/8 p-4 space-y-2">
             <p className="text-xs font-semibold text-primary-400 uppercase tracking-wide">预览</p>
             <div className="flex flex-col gap-2">
