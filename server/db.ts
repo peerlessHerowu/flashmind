@@ -70,6 +70,13 @@ CREATE TABLE IF NOT EXISTS sync_meta (
   last_push_at INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS tts_cache (
+  word       TEXT PRIMARY KEY,
+  audio_data BLOB NOT NULL,
+  mime_type  TEXT NOT NULL DEFAULT 'audio/mpeg',
+  created_at INTEGER NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_decks_updated_at        ON decks(updated_at);
 CREATE INDEX IF NOT EXISTS idx_cards_updated_at        ON cards(updated_at);
 CREATE INDEX IF NOT EXISTS idx_cards_deck_id           ON cards(deck_id);
