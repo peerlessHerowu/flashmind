@@ -22,6 +22,14 @@ export interface CardContent {
   image_id?: string
 }
 
+// ─── Cloze 填空 ───────────────────────────────────────────────────────────────
+
+export interface ClozeSegment {
+  type: 'text' | 'blank'
+  text: string    // text 类型：原文；blank 类型：被遮挡的词
+  index: number   // cloze 序号（c1=1, c2=2...）
+}
+
 // ─── 牌组 ────────────────────────────────────────────────────────────────────
 
 export interface Deck {
@@ -59,6 +67,7 @@ export interface Card {
 
   // 元数据
   is_suspended: boolean
+  card_type?: 'basic' | 'cloze'  // 可选，undefined 视为 basic，向后兼容
   created_at: number
   updated_at: number
 }
