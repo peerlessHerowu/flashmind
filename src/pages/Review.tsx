@@ -11,6 +11,8 @@ import type { Card } from '@/types'
 import { cn } from '@/utils/cn'
 import toast from 'react-hot-toast'
 import { Confetti } from '@/components/review/Confetti'
+import { ClozeCard } from '@/components/review/ClozeCard'
+import { MathText } from '@/components/ui/MathText'
 
 const RATING_CONFIG = [
   { rating: Rating.Again, label: '忘了',   color: 'text-red-500',   bg: 'bg-red-50 dark:bg-red-500/10',   border: 'border-red-200 dark:border-red-500/20',  active: 'bg-red-500 text-white' },
@@ -277,11 +279,15 @@ interface FlashCardProps {
 }
 
 function FlashCard({ card, flipped, onFlip }: FlashCardProps) {
+  const isCloze = card.card_type === 'cloze'
+  // cloze 卡片有独立的"揭示"状态，与翻卡共享 flipped
+  const handleReveal = onFlip
+
   return (
     <div
       className="relative w-full cursor-pointer select-none"
       style={{ perspective: '1200px', minHeight: '280px' }}
-      onClick={onFlip}
+      onClick={isCloze ? undefined : onFlip}
       role="button"
       tabIndex={0}
       aria-label={flipped ? '已翻转' : '点击翻转卡片'}
@@ -301,10 +307,19 @@ function FlashCard({ card, flipped, onFlip }: FlashCardProps) {
           className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <p className="text-2xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed">
-            {card.front.text}
+          {isCloze ? (
+            <div className="text-center leading-relaxed">
+              <ClozeCard text={card.front.text} revealed={false} onReveal={handleReveal} />
+            </div>
+          ) : (
+            <MathText
+              text={card.front.text}
+              className="text-2xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed"
+            />
+          )}
+          <p className="mt-6 text-xs text-paper-300 dark:text-ink-600">
+            {isCloze ? '点击空格揭示答案' : '点击翻转'}
           </p>
-          <p className="mt-6 text-xs text-paper-300 dark:text-ink-600">点击翻转</p>
         </div>
 
         {/* 背面 */}
@@ -312,13 +327,26 @@ function FlashCard({ card, flipped, onFlip }: FlashCardProps) {
           className="absolute inset-0 flex flex-col rounded-2xl bg-white dark:bg-ink-900 shadow-beautiful-md dark:shadow-card-dark p-8 overflow-hidden"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <p className="text-sm font-medium text-paper-400 dark:text-ink-500 dark:text-gray-500 text-center">{card.front.text}</p>
-          <div className="my-4 h-px bg-paper-100 dark:bg-ink-800" />
-          <div className="flex-1 flex items-center justify-center">
-            <p className="text-xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed">
-              {card.back.text}
-            </p>
-          </div>
+          {isCloze ? (
+            // cloze 背面：填空全部揭示
+            <div className="flex-1 flex items-center justify-center text-center leading-relaxed">
+              <ClozeCard text={card.front.text} revealed={true} onReveal={() => {}} />
+            </div>
+          ) : (
+            <>
+              <MathText
+                text={card.front.text}
+                className="text-sm font-medium text-paper-400 dark:text-ink-500 dark:text-gray-500 text-center"
+              />
+              <div className="my-4 h-px bg-paper-100 dark:bg-ink-800" />
+              <div className="flex-1 flex items-center justify-center overflow-y-auto">
+                <MathText
+                  text={card.back.text}
+                  className="text-xl font-semibold text-paper-900 dark:text-white text-center leading-relaxed"
+                />
+              </div>
+            </>
+          )}
           {card.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5 justify-center">
               {card.tags.map(tag => (

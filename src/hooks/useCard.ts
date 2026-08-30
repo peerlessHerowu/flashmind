@@ -20,7 +20,8 @@ export async function createCard(
   deckId: string,
   front: string,
   back: string,
-  tags: string[] = []
+  tags: string[] = [],
+  cardType: 'basic' | 'cloze' = 'basic'
 ): Promise<string> {
   const id  = uuid()
   const now = Date.now()
@@ -32,6 +33,7 @@ export async function createCard(
     front:   { type: 'text', text: front },
     back:    { type: 'text', text: back },
     tags,
+    card_type: cardType,
     is_suspended: false,
     created_at: now,
     updated_at: now,
@@ -45,12 +47,13 @@ export async function createCard(
 /** 更新卡片内容 */
 export async function updateCard(
   id: string,
-  data: { front?: string; back?: string; tags?: string[] }
+  data: { front?: string; back?: string; tags?: string[]; card_type?: 'basic' | 'cloze' }
 ) {
   const updates: Partial<Card> = { updated_at: Date.now() }
-  if (data.front !== undefined) updates.front = { type: 'text', text: data.front }
-  if (data.back  !== undefined) updates.back  = { type: 'text', text: data.back }
-  if (data.tags  !== undefined) updates.tags  = data.tags
+  if (data.front     !== undefined) updates.front     = { type: 'text', text: data.front }
+  if (data.back      !== undefined) updates.back      = { type: 'text', text: data.back }
+  if (data.tags      !== undefined) updates.tags      = data.tags
+  if (data.card_type !== undefined) updates.card_type = data.card_type
   await db.cards.update(id, updates)
   scheduleSyncDebounced()
 }
